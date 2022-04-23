@@ -81,14 +81,6 @@ class SearchFrame(tk.Frame):
         self.student_query = []
         tk.Label(self,text='id').pack()
         tk.Entry(self,textvariable=self.id).pack()
-        with open('student.txt','r',encoding='UTF-8') as id_search_file:
-            student_info = id_search_file.readlines()
-            for item in student_info:
-                info = dict(eval(item))
-                if self.id.get() !='':
-                    if self.id.get() == info['id']:
-                        self.student_query.append(info)
-
         tk.Button(self,text='查询',command=self.show_student).pack()
 
 
@@ -109,8 +101,18 @@ class SearchFrame(tk.Frame):
         self.tree_view.heading('english', text='英语')
         self.tree_view.pack(fill=tk.BOTH,expand=True)
 
+        with open('student.txt','r',encoding='UTF-8') as id_search_file:
+            student_info = id_search_file.readlines()
+            for item in student_info:
+                info = dict(eval(item))
+                if self.id.get() !='':
+                    if self.id.get() == info['id']:
+                        self.student_query.append(info)
+        index=0
         for item in self.student_query:
-        print(self.id.get()) # 检测
+            self.tree_view.insert('',index + 1,values=(
+                                  item['id'], item['姓名'], item['语文'], item['数学'], item['英语']
+                                ))
 
 
 
