@@ -110,7 +110,7 @@ class SearchFrame(tk.Frame):
         self.tree_view.pack(fill=tk.BOTH,expand=True)
 
         for item in self.student_query:
-            print(self.id.get())
+        print(self.id.get()) # 检测
 
 
 

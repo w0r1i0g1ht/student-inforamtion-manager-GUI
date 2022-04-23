@@ -4,6 +4,7 @@
 import tkinter as tk
 from view import AboutFrame,ModifyFrame,InsertFrame,SearchFrame,DeleteFrame,SortFrame,TotalFrame,ContentFrame
 
+# 主页
 class MainPage:
     def __init__(self,master:tk.Tk):
         self.root = master
