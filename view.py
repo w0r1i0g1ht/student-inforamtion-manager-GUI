@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding:UTF-8 -*-
+import time
 import tkinter as tk
 from tkinter import ttk
 
@@ -77,14 +78,14 @@ class SearchFrame(tk.Frame):
 
 
     def id_search(self):
-        # self.destroy()
         self.student_query = []
         tk.Label(self,text='id').pack()
         tk.Entry(self,textvariable=self.id).pack()
-        tk.Button(self,text='查询',command=self.show_student).pack()
+        tk.Button(self,text='查询',command=lambda:[self.show_student,self.frame_clear]).pack() # 修改到这里
 
 
     def show_student(self):
+
         self.table_view = tk.Frame()
         columns = ("id","name","chinese","math","english")
         columns_value = ("id","姓名","语文","数学","英语")
@@ -113,6 +114,9 @@ class SearchFrame(tk.Frame):
             self.tree_view.insert('',index + 1,values=(
                                   item['id'], item['姓名'], item['语文'], item['数学'], item['英语']
                                 ))
+
+    def frame_clear(self):
+        self.tree_view.destroy()
 
 
 
