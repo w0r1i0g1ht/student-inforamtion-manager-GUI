@@ -72,7 +72,7 @@ class SearchFrame(tk.Frame):
         super().__init__(root)
         self.id_Button = tk.Button(self,text='按照id查询',command=self.id_search)
         self.id_Button.pack()
-        # tk.Button(self,text='按照姓名查询').pack()
+        # tk.Button(self,text='按照姓名查询').pack()   思路： id和姓名各自创建一个frame
         self.id = tk.StringVar()
         self.name = tk.StringVar()
 
@@ -93,7 +93,7 @@ class SearchFrame(tk.Frame):
         columns_value = ("id","姓名","语文","数学","英语")
         self.tree_view = ttk.Treeview(self,show='headings',columns=columns)
         self.tree_view.column('id',width=80,anchor='center')
-        self.tree_view.column('name', width=80, anchor='center')
+        self.tree_view.column('name', width=120, anchor='center')
         self.tree_view.column('chinese', width=80, anchor='center')
         self.tree_view.column('math', width=80, anchor='center')
         self.tree_view.column('english', width=80, anchor='center')
@@ -120,8 +120,8 @@ class SearchFrame(tk.Frame):
         tk.Button(self,text='继续查询',command=self.show_student2).pack()
 
     def show_student2(self):
-        for item1 in self.tree_view.get_children():
-            self.tree_view.delete(item1)
+        for item in self.tree_view.get_children():
+            self.tree_view.delete(item)
         with open('student.txt','r',encoding='UTF-8') as id_search_file:
             student_info = id_search_file.readlines()
             for item in student_info:
@@ -130,8 +130,7 @@ class SearchFrame(tk.Frame):
                     if self.id.get() == info['id']:
                         self.student_query=[]
                         self.student_query.append(info)
-
-        index=0
+        index = 0
         for item in self.student_query:
             self.tree_view.insert('',index + 1,values=(
                                   item['id'], item['姓名'], item['语文'], item['数学'], item['英语']
@@ -157,4 +156,53 @@ class TotalFrame(tk.Frame):
 class ContentFrame(tk.Frame):
     def __init__(self,root):
         super().__init__(root)
-        tk.Label(self,text='概览页面').pack()
+        self.Button1 = tk.Button(self,text='概览页面',command=self.show_content)
+        self.Button1.pack()
+
+
+
+    def show_content(self):
+        self.table_view = tk.Frame()
+        columns = ("id", "name", "chinese", "math", "english")
+        columns_value = ("id", "姓名", "语文", "数学", "英语")
+        self.tree_view = ttk.Treeview(self, show='headings', columns=columns)
+        self.tree_view.column('id', width=80, anchor='center')
+        self.tree_view.column('name', width=120, anchor='center')
+        self.tree_view.column('chinese', width=80, anchor='center')
+        self.tree_view.column('math', width=80, anchor='center')
+        self.tree_view.column('english', width=80, anchor='center')
+        self.tree_view.heading('id', text='id')
+        self.tree_view.heading('name', text='姓名')
+        self.tree_view.heading('chinese', text='语文')
+        self.tree_view.heading('math', text='数学')
+        self.tree_view.heading('english', text='英语')
+        self.tree_view.pack(fill=tk.BOTH, expand=True)
+
+        with open('student.txt','r',encoding='UTF-8') as id_search_file:
+            student_info = id_search_file.readlines()
+            index = 1
+            self.student_query = []
+            for item in student_info:
+                info = dict(eval(item))
+                self.student_query.append(info)
+            for item in self.student_query:
+                self.tree_view.insert('', index + 1, values=(
+                    item['id'], item['姓名'], item['语文'], item['数学'], item['英语']
+                ))
+        self.Button1.destroy()
+        tk.Button(self, text='刷新', command=self.show_content2).pack()
+
+    def show_content2(self):
+        for item in self.tree_view.get_children():
+            self.tree_view.delete(item)
+        with open('student.txt','r',encoding='UTF-8') as id_search_file:
+            student_info = id_search_file.readlines()
+            index = 1
+            self.student_query = []
+            for item in student_info:
+                info = dict(eval(item))
+                self.student_query.append(info)
+            for item in self.student_query:
+                self.tree_view.insert('', index + 1, values=(
+                    item['id'], item['姓名'], item['语文'], item['数学'], item['英语']
+                ))
