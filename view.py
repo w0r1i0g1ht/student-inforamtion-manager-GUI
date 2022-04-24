@@ -70,8 +70,9 @@ class InsertFrame(tk.Frame):
 class SearchFrame(tk.Frame):
     def __init__(self,root):
         super().__init__(root)
-        tk.Button(self,text='按照id查询',command=self.id_search).pack()
-        tk.Button(self,text='按照姓名查询').pack()
+        self.id_Button = tk.Button(self,text='按照id查询',command=self.id_search)
+        self.id_Button.pack()
+        # tk.Button(self,text='按照姓名查询').pack()
         self.id = tk.StringVar()
         self.name = tk.StringVar()
 
@@ -81,8 +82,9 @@ class SearchFrame(tk.Frame):
         self.student_query = []
         tk.Label(self,text='id').pack()
         tk.Entry(self,textvariable=self.id).pack()
-        tk.Button(self,text='查询',command=lambda:[self.show_student,self.frame_clear]).pack() # 修改到这里
-
+        self.Button1 = tk.Button(self,text='查询',command=self.show_student)
+        self.Button1.pack()
+        self.id_Button.destroy()
 
     def show_student(self):
 
@@ -114,9 +116,26 @@ class SearchFrame(tk.Frame):
             self.tree_view.insert('',index + 1,values=(
                                   item['id'], item['姓名'], item['语文'], item['数学'], item['英语']
                                 ))
+        self.Button1.destroy()
+        tk.Button(self,text='继续查询',command=self.show_student2).pack()
 
-    def frame_clear(self):
-        self.tree_view.destroy()
+    def show_student2(self):
+        for item1 in self.tree_view.get_children():
+            self.tree_view.delete(item1)
+        with open('student.txt','r',encoding='UTF-8') as id_search_file:
+            student_info = id_search_file.readlines()
+            for item in student_info:
+                info = dict(eval(item))
+                if self.id.get() !='':
+                    if self.id.get() == info['id']:
+                        self.student_query=[]
+                        self.student_query.append(info)
+
+        index=0
+        for item in self.student_query:
+            self.tree_view.insert('',index + 1,values=(
+                                  item['id'], item['姓名'], item['语文'], item['数学'], item['英语']
+                                ))
 
 
 
