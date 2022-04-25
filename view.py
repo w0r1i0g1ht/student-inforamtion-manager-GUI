@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding:UTF-8 -*-
-import time
+import os
 import tkinter as tk
 from tkinter import ttk
 
@@ -142,6 +142,45 @@ class DeleteFrame(tk.Frame):
     def __init__(self,root):
         super().__init__(root)
         tk.Label(self,text='删除页面').pack()
+        self.id = tk.StringVar()
+        self.status = tk.StringVar()
+        tk.Label(self,text='根据id删除用户').pack()
+        tk.Entry(self,textvariable=self.id).pack()
+        tk.Button(self,text='删除',command=self.id_delete).pack()
+        tk.Label(self,textvariable=self.status).pack()
+
+    def id_delete(self):
+        student_info = []
+        if self.id.get() != '':
+            if os.path.exists('student.txt'):
+                with open('student.txt','r',encoding='UTF-8') as r_file:
+                    student_info = r_file.readlines()
+            else:
+                self.status.set('存放信息的文件不存在')
+
+            if student_info:
+                with open('student.txt','w',encoding='UTF-8') as w_file:
+                    info = []
+                    flag = False
+                    for item in student_info:
+                        info = dict(eval(item))
+                        if info['id'] != self.id.get():
+                            w_file.write(str(info) + '\n')
+                        else:
+                            flag = True
+                    if flag:
+                        self.status.set(f'id为{self.id.get()}的学生已被删除')
+                    else:
+                        self.status.set(f'没有找到id为{self.id.get()}的学生')
+
+
+
+        else:
+            self.status.set('请输入要删除的id')
+        pass
+
+
+
 
 class SortFrame(tk.Frame):
     def __init__(self,root):
@@ -158,7 +197,6 @@ class ContentFrame(tk.Frame):
         super().__init__(root)
         self.Button1 = tk.Button(self,text='概览页面',command=self.show_content)
         self.Button1.pack()
-
 
 
     def show_content(self):
