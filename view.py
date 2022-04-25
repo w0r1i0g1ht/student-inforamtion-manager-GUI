@@ -9,6 +9,8 @@ class AboutFrame(tk.Frame):
     def __init__(self,root):
         super().__init__(root)
         tk.Label(self,text='关于页面').pack()
+        tk.Label(self,text='made by 丘丘人之大都督').pack()
+
 
 
 class ModifyFrame(tk.Frame):
