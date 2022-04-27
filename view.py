@@ -16,21 +16,77 @@ class AboutFrame(tk.Frame):
 class ModifyFrame(tk.Frame):
     def __init__(self,root):
         super().__init__(root)
-        tk.Label(self,text='修改页面').pack()
-
-class InsertFrame(tk.Frame):
-    def __init__(self,root):
-        super().__init__(root)
-        # tk.Label(self,text='录入页面').pack()
+        self.student_query = []
         self.id = tk.StringVar()
         self.name = tk.StringVar()
         self.chinese = tk.StringVar()
         self.math = tk.StringVar()
         self.english = tk.StringVar()
-        self.insert_data()
+        self.status = tk.StringVar()
+        self.modify_page()
+
+    def modify_page(self):
+        tk.Label(self, text='id').grid(row=1, column=1, pady=10)
+        tk.Entry(self, textvariable=self.id).grid(row=1, column=2, pady=10)
+        tk.Label(self, text='姓名').grid(row=2, column=1, pady=10)
+        tk.Entry(self, textvariable=self.name).grid(row=2, column=2, pady=10)
+        tk.Label(self, text='语文').grid(row=3, column=1, pady=10)
+        tk.Entry(self, textvariable=self.chinese).grid(row=3, column=2, pady=10)
+        tk.Label(self, text='数学').grid(row=4, column=1, pady=10)
+        tk.Entry(self, textvariable=self.math).grid(row=4, column=2, pady=10)
+        tk.Label(self, text='英语').grid(row=5, column=1, pady=10)
+        tk.Entry(self, textvariable=self.english).grid(row=5, column=2, pady=10)
+        tk.Button(self, text='查询', command=self.search_data).grid(row=6, column=1, pady=10)
+        tk.Button(self, text='修改', command=self.modify_data).grid(row=6, column=3, pady=10)
+        tk.Label(self,textvariable=self.status).grid(row=7, column=2, pady=10)
 
 
-    def insert_data(self):
+    def search_data(self):
+        flag = False
+        with open('student.txt','r',encoding='UTF-8') as id_search_file:
+            student_info = id_search_file.readlines()
+            for item in student_info:
+                info = dict(eval(item))
+                if self.id.get() !='':
+                    if self.id.get() == info['id']:
+                        self.student_query.append(info)
+                        flag = True
+        if flag:
+            for item in self.student_query:
+                self.id.set(item['id'])
+                self.name.set(item['姓名'])
+                self.chinese.set(item['语文'])
+                self.math.set(item['数学'])
+                self.english.set(item['英语'])
+                self.status.set('数据查询成功')
+        else:
+            self.status.set('未查询到此人')
+            self.name.set('')
+            self.chinese.set('')
+            self.math.set('')
+            self.english.set('')
+        self.student_query = []
+        pass
+
+    def modify_data(self):
+
+        pass
+
+
+
+
+class InsertFrame(tk.Frame):
+    def __init__(self,root):
+        super().__init__(root)
+        self.id = tk.StringVar()
+        self.name = tk.StringVar()
+        self.chinese = tk.StringVar()
+        self.math = tk.StringVar()
+        self.english = tk.StringVar()
+        self.insert_page()
+
+
+    def insert_page(self):
 
         tk.Label(self,text='id').grid(row=1,column=1,pady=10)
         tk.Entry(self,textvariable=self.id).grid(row=1,column=2,pady=10)
@@ -72,6 +128,7 @@ class InsertFrame(tk.Frame):
 class SearchFrame(tk.Frame):
     def __init__(self,root):
         super().__init__(root)
+        self.student_query = []
         self.id_Button = tk.Button(self,text='按照id查询',command=self.id_search)
         self.id_Button.pack()
         # tk.Button(self,text='按照姓名查询').pack()   思路： id和姓名各自创建一个frame
@@ -81,7 +138,6 @@ class SearchFrame(tk.Frame):
 
 
     def id_search(self):
-        self.student_query = []
         tk.Label(self,text='id').pack()
         tk.Entry(self,textvariable=self.id).pack()
         self.Button1 = tk.Button(self,text='查询',command=self.show_student)
