@@ -16,6 +16,7 @@ class AboutFrame(tk.Frame):
 class ModifyFrame(tk.Frame):
     def __init__(self,root):
         super().__init__(root)
+        self.flag = tk.StringVar()
         self.student_query = []
         self.id = tk.StringVar()
         self.name = tk.StringVar()
@@ -42,16 +43,19 @@ class ModifyFrame(tk.Frame):
 
 
     def search_data(self):
-        flag = False
-        with open('student.txt','r',encoding='UTF-8') as id_search_file:
-            student_info = id_search_file.readlines()
-            for item in student_info:
-                info = dict(eval(item))
-                if self.id.get() !='':
-                    if self.id.get() == info['id']:
-                        self.student_query.append(info)
-                        flag = True
-        if flag:
+        self.flag = False
+        if os.path.exists('student.txt'):
+            with open('student.txt','r',encoding='UTF-8') as id_search_file:
+                student_info = id_search_file.readlines()
+        else:
+            self.status.set('存放信息的文件不存在')
+        for item in student_info:
+            info = dict(eval(item))
+            if self.id.get() !='':
+                if self.id.get() == info['id']:
+                    self.student_query.append(info)
+                    self.flag = True
+        if self.flag:
             for item in self.student_query:
                 self.id.set(item['id'])
                 self.name.set(item['姓名'])
@@ -69,8 +73,40 @@ class ModifyFrame(tk.Frame):
         pass
 
     def modify_data(self):
+        if self.id.get() != '':
+            if os.path.exists('student.txt'):
+                with open('student.txt','r',encoding='UTF-8') as r_file:
+                    student_info = r_file.readlines()
+            else:
+                self.status.set('存放信息的文件不存在')
 
+            if student_info:
+                with open('student.txt','w',encoding='UTF-8') as w_file:
+                    flag = False
+                    for item in student_info:
+                        info = dict(eval(item))
+                        if info['id'] != self.id.get():
+                            w_file.write(str(info) + '\n')
+                        else:
+                            info['姓名'] = self.name.get()
+                            info['语文'] = self.chinese.get()
+                            info['数学'] = self.math.get()
+                            info['英语'] = self.english.get()
+                            w_file.write(str(info) + '\n')
+                            flag = True
+                    if flag:
+                        self.status.set(f'id为{self.id.get()}的学生已被修改')
+                        self.name.set('')
+                        self.chinese.set('')
+                        self.math.set('')
+                        self.english.set('')
+                    else:
+                        self.status.set(f'没有找到id为{self.id.get()}的学生')
+
+        else:
+            self.status.set('请输入要删除的id')
         pass
+
 
 
 
@@ -83,6 +119,7 @@ class InsertFrame(tk.Frame):
         self.chinese = tk.StringVar()
         self.math = tk.StringVar()
         self.english = tk.StringVar()
+        self.status = tk.StringVar()
         self.insert_page()
 
 
@@ -99,28 +136,31 @@ class InsertFrame(tk.Frame):
         tk.Label(self, text='英语').grid(row=5, column=1, pady=10)
         tk.Entry(self, textvariable=self.english).grid(row=5, column=2, pady=10)
         tk.Button(self,text='录入',command=self.save_data).grid(row=6,column=2,pady=10)
-
+        tk.Label(self, textvariable=self.status).grid(row=7, column=2)
 
 
 
     def save_data(self):
-        self.student_list = []
-        self.student = {'id': self.id.get(), '姓名': self.name.get(), '语文': self.chinese.get(), '数学': self.math.get(),
-                        '英语': self.english.get()}
-        self.student_list.append(self.student)
-        tk.Label(self, text='录入成功').grid(row=7, column=2)
-        try:
-            stu_txt = open('student.txt','a',encoding='UTF-8')
-        except:
-            stu_txt = open('student.txt','w',encoding='UTF-8')
-        for item in self.student_list:
-            stu_txt.write(str(item) + '\n')
-        stu_txt.close()
-        self.id.set('')
-        self.name.set('')
-        self.chinese.set('')
-        self.math.set('')
-        self.english.set('')
+        if self.id.get() != '':
+            self.student_list = []
+            self.student = {'id': self.id.get(), '姓名': self.name.get(), '语文': self.chinese.get(), '数学': self.math.get(),
+                            '英语': self.english.get()}
+            self.student_list.append(self.student)
+            self.status.set('录入成功')
+            try:
+                stu_txt = open('student.txt','a',encoding='UTF-8')
+            except:
+                stu_txt = open('student.txt','w',encoding='UTF-8')
+            for item in self.student_list:
+                stu_txt.write(str(item) + '\n')
+            stu_txt.close()
+            self.id.set('')
+            self.name.set('')
+            self.chinese.set('')
+            self.math.set('')
+            self.english.set('')
+        else:
+            self.status.set('id为必填项')
 
 
 
@@ -199,7 +239,6 @@ class SearchFrame(tk.Frame):
 class DeleteFrame(tk.Frame):
     def __init__(self,root):
         super().__init__(root)
-        tk.Label(self,text='删除页面').pack()
         self.id = tk.StringVar()
         self.status = tk.StringVar()
         tk.Label(self,text='根据id删除用户').pack()
@@ -230,8 +269,6 @@ class DeleteFrame(tk.Frame):
                         self.status.set(f'id为{self.id.get()}的学生已被删除')
                     else:
                         self.status.set(f'没有找到id为{self.id.get()}的学生')
-
-
 
         else:
             self.status.set('请输入要删除的id')
