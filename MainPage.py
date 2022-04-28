@@ -28,7 +28,6 @@ class MainPage:
         menubar.add_command(label='查询',command=self.show_search)
         menubar.add_command(label='修改', command=self.show_modify)
         menubar.add_command(label='删除',command=self.show_delete)
-        menubar.add_command(label='排序',command=self.show_sort)
         menubar.add_command(label='统计',command=self.show_total)
         menubar.add_command(label='概览',command=self.show_content)
         menubar.add_command(label='关于',command=self.show_about)
@@ -84,17 +83,6 @@ class MainPage:
         self.search_frame.pack_forget()
         self.delete_frame.pack_forget()
         self.sort_frame.pack_forget()
-        self.total_frame.pack_forget()
-        self.content_frame.pack_forget()
-        pass
-
-    def show_sort(self):
-        self.about_frame.pack_forget()
-        self.modify_frame.pack_forget()
-        self.insert_frame.pack_forget()
-        self.search_frame.pack_forget()
-        self.delete_frame.pack_forget()
-        self.sort_frame.pack()
         self.total_frame.pack_forget()
         self.content_frame.pack_forget()
         pass

@@ -383,10 +383,10 @@ class ContentFrame(tk.Frame):
         self.tree_view.column('total', width=80, anchor='center')
         self.tree_view.heading('id', text='id')
         self.tree_view.heading('name', text='姓名')
-        self.tree_view.heading('chinese', text='语文')
-        self.tree_view.heading('math', text='数学')
-        self.tree_view.heading('english', text='英语')
-        self.tree_view.heading('total', text='总成绩')
+        self.tree_view.heading('chinese', text='语文', command=lambda col="chinese": self.tree_view_sort_column(col,False))
+        self.tree_view.heading('math', text='数学', command=lambda col="math": self.tree_view_sort_column(col,False))
+        self.tree_view.heading('english', text='英语', command=lambda col="english": self.tree_view_sort_column(col,False))
+        self.tree_view.heading('total', text='总成绩', command=lambda col="total": self.tree_view_sort_column(col,False))
         self.tree_view.pack(fill=tk.BOTH, expand=True)
 
         with open('student.txt','r',encoding='UTF-8') as search_file:
@@ -416,3 +416,10 @@ class ContentFrame(tk.Frame):
                 self.tree_view.insert('', index + 1, values=(
                     item['id'], item['姓名'], item['语文'], item['数学'], item['英语'], (int(item['语文']) + int(item['数学']) + int(item['英语']))
                 ))
+
+    def tree_view_sort_column(self, col,reverse):
+        l = [(self.tree_view.set(k, col), k) for k in self.tree_view.get_children('')]
+        l.sort(key=lambda t: int(t[0]),reverse=reverse)
+        for index, (val, k) in enumerate(l):
+            self.tree_view.move(k, '', index)
+        self.tree_view.heading(col, command=lambda: self.tree_view_sort_column(col,False))
