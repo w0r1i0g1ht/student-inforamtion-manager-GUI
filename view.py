@@ -10,6 +10,7 @@ class AboutFrame(tk.Frame):
         super().__init__(root)
         tk.Label(self,text='关于页面').pack()
         tk.Label(self,text='made by 丘丘人之大都督').pack()
+        tk.Label(self,text='可实现功能有：1.录入 2.查询 3.修改 4.删除 5.排序 6.概览 7.统计 8.关于').pack()
 
 
 
@@ -27,15 +28,15 @@ class ModifyFrame(tk.Frame):
         self.modify_page()
 
     def modify_page(self):
-        tk.Label(self, text='id').grid(row=1, column=1, pady=10)
+        tk.Label(self, text='id：').grid(row=1, column=1, pady=10)
         tk.Entry(self, textvariable=self.id).grid(row=1, column=2, pady=10)
-        tk.Label(self, text='姓名').grid(row=2, column=1, pady=10)
+        tk.Label(self, text='姓名：').grid(row=2, column=1, pady=10)
         tk.Entry(self, textvariable=self.name).grid(row=2, column=2, pady=10)
-        tk.Label(self, text='语文').grid(row=3, column=1, pady=10)
+        tk.Label(self, text='语文：').grid(row=3, column=1, pady=10)
         tk.Entry(self, textvariable=self.chinese).grid(row=3, column=2, pady=10)
-        tk.Label(self, text='数学').grid(row=4, column=1, pady=10)
+        tk.Label(self, text='数学：').grid(row=4, column=1, pady=10)
         tk.Entry(self, textvariable=self.math).grid(row=4, column=2, pady=10)
-        tk.Label(self, text='英语').grid(row=5, column=1, pady=10)
+        tk.Label(self, text='英语：').grid(row=5, column=1, pady=10)
         tk.Entry(self, textvariable=self.english).grid(row=5, column=2, pady=10)
         tk.Button(self, text='查询', command=self.search_data).grid(row=6, column=1, pady=10)
         tk.Button(self, text='修改', command=self.modify_data).grid(row=6, column=3, pady=10)
@@ -125,15 +126,15 @@ class InsertFrame(tk.Frame):
 
     def insert_page(self):
 
-        tk.Label(self,text='id').grid(row=1,column=1,pady=10)
+        tk.Label(self,text='id：').grid(row=1,column=1,pady=10)
         tk.Entry(self,textvariable=self.id).grid(row=1,column=2,pady=10)
-        tk.Label(self, text='姓名').grid(row=2, column=1, pady=10)
+        tk.Label(self, text='姓名：').grid(row=2, column=1, pady=10)
         tk.Entry(self, textvariable=self.name).grid(row=2, column=2, pady=10)
-        tk.Label(self, text='语文').grid(row=3, column=1, pady=10)
+        tk.Label(self, text='语文：').grid(row=3, column=1, pady=10)
         tk.Entry(self, textvariable=self.chinese).grid(row=3, column=2, pady=10)
-        tk.Label(self, text='数学').grid(row=4, column=1, pady=10)
+        tk.Label(self, text='数学：').grid(row=4, column=1, pady=10)
         tk.Entry(self, textvariable=self.math).grid(row=4, column=2, pady=10)
-        tk.Label(self, text='英语').grid(row=5, column=1, pady=10)
+        tk.Label(self, text='英语：').grid(row=5, column=1, pady=10)
         tk.Entry(self, textvariable=self.english).grid(row=5, column=2, pady=10)
         tk.Button(self,text='录入',command=self.save_data).grid(row=6,column=2,pady=10)
         tk.Label(self, textvariable=self.status).grid(row=7, column=2)
@@ -178,7 +179,7 @@ class SearchFrame(tk.Frame):
 
 
     def id_search(self):
-        tk.Label(self,text='id').pack()
+        tk.Label(self,text='请输入id').pack()
         tk.Entry(self,textvariable=self.id).pack()
         self.Button1 = tk.Button(self,text='查询',command=self.show_student)
         self.Button1.pack()
@@ -280,39 +281,116 @@ class DeleteFrame(tk.Frame):
 class SortFrame(tk.Frame):
     def __init__(self,root):
         super().__init__(root)
-        tk.Label(self,text='排序页面').pack()
+        tk.Label(self,text='排序页面').grid(row=1,column=2,pady=10)
+        tk.Button(self,text='按照语文成绩排序').grid(row=2,column=1,pady=10)
+        tk.Button(self,text='按照数学成绩排序').grid(row=2,column=2,pady=10)
+        tk.Button(self,text='按照英语成绩排序').grid(row=2,column=3,pady=10)
+
+
+
+
+
 
 class TotalFrame(tk.Frame):
     def __init__(self,root):
         super().__init__(root)
-        tk.Label(self,text='统计页面').pack()
+        self.student_query = []
+        self.Total_page()
+
+
+    def Total_page(self):
+        self.table_view = tk.Frame()
+        columns = ("chinese_aver","math_aver","english_aver","score_aver")
+        columns_value = ("语文平均分","数学平均分","英语平均分","总成绩平均分")
+        self.tree_view = ttk.Treeview(self,show='headings',columns=columns)
+        self.tree_view.column('chinese_aver',width=100,anchor='center')
+        self.tree_view.column('math_aver', width=100, anchor='center')
+        self.tree_view.column('english_aver', width=100, anchor='center')
+        self.tree_view.column('score_aver', width=100, anchor='center')
+        self.tree_view.heading('chinese_aver',text='语文平均分')
+        self.tree_view.heading('math_aver', text='数学平均分')
+        self.tree_view.heading('english_aver', text='英语平均分')
+        self.tree_view.heading('score_aver', text='总成绩平均分')
+        self.tree_view.pack(fill=tk.BOTH,expand=True)
+
+        with open('student.txt','r',encoding='UTF-8') as search_file:
+            student_info = search_file.readlines()
+            index = 1
+            chinese_total = 0
+            math_total = 0
+            english_total = 0
+            score_total = 0
+            length = 0
+            self.student_query = []
+            for item in student_info:
+                info = dict(eval(item))
+                self.student_query.append(info)
+            for item in self.student_query:
+                chinese_total += int(item['语文'])
+                math_total += int(item['数学'])
+                english_total += int(item['英语'])
+                length += 1
+            score_total += chinese_total + math_total + english_total
+            self.tree_view.insert('', index + 1, values=(
+                chinese_total/length, math_total/length, english_total/length, score_total/length
+            ))
+        tk.Button(self, text='刷新', command=self.Total_page2).pack()
+
+
+
+    def Total_page2(self):
+        for item in self.tree_view.get_children():
+            self.tree_view.delete(item)
+        with open('student.txt','r',encoding='UTF-8') as search_file:
+            student_info = search_file.readlines()
+            index = 1
+            chinese_total = 0
+            math_total = 0
+            english_total = 0
+            score_total = 0
+            length = 0
+            self.student_query = []
+            for item in student_info:
+                info = dict(eval(item))
+                self.student_query.append(info)
+            for item in self.student_query:
+                chinese_total += int(item['语文'])
+                math_total += int(item['数学'])
+                english_total += int(item['英语'])
+                length += 1
+            score_total += chinese_total + math_total + english_total
+            self.tree_view.insert('', index + 1, values=(
+                chinese_total/length, math_total/length, english_total/length, score_total/length
+            ))
+        pass
+
 
 class ContentFrame(tk.Frame):
     def __init__(self,root):
         super().__init__(root)
-        self.Button1 = tk.Button(self,text='概览页面',command=self.show_content)
-        self.Button1.pack()
-
+        self.show_content()
 
     def show_content(self):
         self.table_view = tk.Frame()
-        columns = ("id", "name", "chinese", "math", "english")
-        columns_value = ("id", "姓名", "语文", "数学", "英语")
+        columns = ("id", "name", "chinese", "math", "english", "total")
+        columns_value = ("id", "姓名", "语文", "数学", "英语", "总成绩")
         self.tree_view = ttk.Treeview(self, show='headings', columns=columns)
         self.tree_view.column('id', width=80, anchor='center')
         self.tree_view.column('name', width=120, anchor='center')
         self.tree_view.column('chinese', width=80, anchor='center')
         self.tree_view.column('math', width=80, anchor='center')
         self.tree_view.column('english', width=80, anchor='center')
+        self.tree_view.column('total', width=80, anchor='center')
         self.tree_view.heading('id', text='id')
         self.tree_view.heading('name', text='姓名')
         self.tree_view.heading('chinese', text='语文')
         self.tree_view.heading('math', text='数学')
         self.tree_view.heading('english', text='英语')
+        self.tree_view.heading('total', text='总成绩')
         self.tree_view.pack(fill=tk.BOTH, expand=True)
 
-        with open('student.txt','r',encoding='UTF-8') as id_search_file:
-            student_info = id_search_file.readlines()
+        with open('student.txt','r',encoding='UTF-8') as search_file:
+            student_info = search_file.readlines()
             index = 1
             self.student_query = []
             for item in student_info:
@@ -320,16 +398,15 @@ class ContentFrame(tk.Frame):
                 self.student_query.append(info)
             for item in self.student_query:
                 self.tree_view.insert('', index + 1, values=(
-                    item['id'], item['姓名'], item['语文'], item['数学'], item['英语']
+                    item['id'], item['姓名'], item['语文'], item['数学'], item['英语'], (int(item['语文']) + int(item['数学']) + int(item['英语']))
                 ))
-        self.Button1.destroy()
         tk.Button(self, text='刷新', command=self.show_content2).pack()
 
     def show_content2(self):
         for item in self.tree_view.get_children():
             self.tree_view.delete(item)
-        with open('student.txt','r',encoding='UTF-8') as id_search_file:
-            student_info = id_search_file.readlines()
+        with open('student.txt','r',encoding='UTF-8') as search_file:
+            student_info = search_file.readlines()
             index = 1
             self.student_query = []
             for item in student_info:
@@ -337,5 +414,5 @@ class ContentFrame(tk.Frame):
                 self.student_query.append(info)
             for item in self.student_query:
                 self.tree_view.insert('', index + 1, values=(
-                    item['id'], item['姓名'], item['语文'], item['数学'], item['英语']
+                    item['id'], item['姓名'], item['语文'], item['数学'], item['英语'], (int(item['语文']) + int(item['数学']) + int(item['英语']))
                 ))
