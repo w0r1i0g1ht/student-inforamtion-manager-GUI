@@ -111,8 +111,4 @@ class MainPage:
 
 
 
-if __name__ == '__main__':
-    root = tk.Tk()
-    root.iconbitmap('favicon.ico')
-    MainPage(master=root)
-    root.mainloop()
+

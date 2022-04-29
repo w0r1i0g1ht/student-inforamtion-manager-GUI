@@ -381,7 +381,7 @@ class ContentFrame(tk.Frame):
         self.tree_view.column('math', width=80, anchor='center')
         self.tree_view.column('english', width=80, anchor='center')
         self.tree_view.column('total', width=80, anchor='center')
-        self.tree_view.heading('id', text='id')
+        self.tree_view.heading('id', text='id', command=lambda col="id": self.tree_view_sort_column(col,False))
         self.tree_view.heading('name', text='姓名')
         self.tree_view.heading('chinese', text='语文', command=lambda col="chinese": self.tree_view_sort_column(col,False))
         self.tree_view.heading('math', text='数学', command=lambda col="math": self.tree_view_sort_column(col,False))
