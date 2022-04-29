@@ -277,20 +277,6 @@ class DeleteFrame(tk.Frame):
 
 
 
-
-class SortFrame(tk.Frame):
-    def __init__(self,root):
-        super().__init__(root)
-        tk.Label(self,text='排序页面').grid(row=1,column=2,pady=10)
-        tk.Button(self,text='按照语文成绩排序').grid(row=2,column=1,pady=10)
-        tk.Button(self,text='按照数学成绩排序').grid(row=2,column=2,pady=10)
-        tk.Button(self,text='按照英语成绩排序').grid(row=2,column=3,pady=10)
-
-
-
-
-
-
 class TotalFrame(tk.Frame):
     def __init__(self,root):
         super().__init__(root)
