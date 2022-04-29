@@ -47,7 +47,7 @@ class LoginFrame:
 
 if __name__ == '__main__':
     root = tk.Tk()
-    root.iconbitmap('favicon.ico')
+    root.iconbitmap('icon.ico')
     LoginFrame(master=root)
     root.mainloop()
 
