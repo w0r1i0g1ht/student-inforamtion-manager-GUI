@@ -10,7 +10,7 @@ class AboutFrame(tk.Frame):
         super().__init__(root)
         tk.Label(self,text='关于页面').pack()
         tk.Label(self,text='made by 丘丘人之大都督').pack()
-        tk.Label(self,text='可实现功能有：1.录入 2.查询 3.修改 4.删除 5.排序 6.概览 7.统计 8.关于').pack()
+        tk.Label(self,text='可实现功能有：1.登录  2.录入  3.查询  4.修改  5.删除  6.统计  7.概览  8.排序  9.关于').pack()
 
 
 
